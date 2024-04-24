@@ -15,7 +15,7 @@ public class GameController : MonoBehaviour
     public AudioClip popSound;
     public AudioClip missSound;
     public AudioClip gameOverSound;
-    List<Word> words = new List<Word>();
+    public List<Word> words = new List<Word>();
     List<Spirit> spirits = new List<Spirit>();
     float spawnRate = 2.5f;
     int score = 0;
@@ -23,7 +23,6 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        AddWords();
         AddSpirit();
     }
 
@@ -55,25 +54,23 @@ public class GameController : MonoBehaviour
 
     public void AddWords() {
         foreach (Word word in words) {
-            if (word != null) {
-                Destroy(word.gameObject);
-            }
+            word.SetNewWord();
         }
-        words.Clear();
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 7; j++) {
-                GameObject wordObj = Instantiate(wordPrefab);
-                Word word = wordObj.GetComponent<Word>();
-                word.gameController = this;
-                words.Add(word);
-                wordObj.transform.SetParent(canvas.transform);
-                wordObj.transform.position = new Vector3(280 + i * 370, 150 + j * 75, 0);
-                if (i == 0 || i == 3) {
-                    wordObj.transform.position = new Vector2(wordObj.transform.position.x, wordObj.transform.position.y + 50);
-                }
-                wordObj.transform.eulerAngles = new Vector3(0, 0, Random.Range(-2, 2));
-            }
-        }
+        // for (int i = 0; i < 4; i++) {
+        //     for (int j = 0; j < 7; j++) {
+        //         GameObject wordObj = Instantiate(wordPrefab);
+        //         Word word = wordObj.GetComponent<Word>();
+        //         word.gameController = this;
+        //         words.Add(word);
+        //         wordObj.transform.SetParent(canvas.transform);
+        //         wordObj.transform.localScale = new Vector3(1, 1, 1);
+        //         wordObj.transform.position = new Vector3(280 + i * 370, 150 + j * 75, 0);
+        //         if (i == 0 || i == 3) {
+        //             wordObj.transform.position = new Vector2(wordObj.transform.position.x, wordObj.transform.position.y + 50);
+        //         }
+        //         wordObj.transform.eulerAngles = new Vector3(0, 0, Random.Range(-2, 2));
+        //     }
+        // }
     }
 
     public void SpiritReachedEnd() {

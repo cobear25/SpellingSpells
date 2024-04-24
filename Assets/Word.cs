@@ -107,6 +107,9 @@ public class Word : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (removed) {
+            return;
+        }
         if (gameController.gameOver) {
             return;
         }
@@ -124,8 +127,7 @@ public class Word : MonoBehaviour
                 if (characters.Count == 0)
                 {
                     gameController.WordTyped(word, spiritType);
-                    Debug.Log("Word typed: " + word);
-                    Destroy(gameObject);
+                    RemoveWord();
                 }
             } else if (characters.Count < word.Length)
             {
@@ -139,9 +141,33 @@ public class Word : MonoBehaviour
 
     public void ClearWord()
     {
+        if (removed) {
+            return;
+        }
         characters.Clear();
         characters.AddRange(word.ToLower().ToCharArray());
         text.color = color;
         text.text = word.ToUpper();
+    }
+
+    public void SetNewWord()
+    {
+        word = availableWords[Random.Range(0, availableWords.Count)];
+        int randColor = Random.Range(0, colors.Count);
+        spiritType = (SpiritType)randColor;
+        characters.Clear();
+        characters.AddRange(word.ToLower().ToCharArray());
+        text = GetComponentInChildren<TextMeshProUGUI>();
+        color = colors[randColor];
+        text.color = color;
+        text.text = word.ToUpper();
+        removed = false;
+    }
+
+    bool removed = false;
+    public void RemoveWord()
+    {
+        removed = true;
+        text.text = "";
     }
 }
